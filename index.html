@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body ng-app="app">
+	<div class="zz" ng-controller="ctrl1">
+		{{zz}}<br />
+		<my-directive fn="changeName1()"></my-directive>
+	</div>
+
+	<div class="zz" ng-controller="ctrl2">
+		{{zz}}<br />
+		<my-directive fn="changeName2()"></my-directive>
+	</div>
+	
+</body>
+<script src="angular.min.js"></script>
+<script>
+	var app = angular.module('app',[]);
+	app.controller('ctrl1',['$scope',function($scope){
+		$scope.zz = '周智';
+		$scope.changeName1 = function(){
+			console.log('正在加载数据111111111');
+		}
+	}])
+
+	app.controller('ctrl2',['$scope',function($scope){
+		$scope.zz = '周智';
+		$scope.changeName2 = function(){
+			console.log('正在加载数据2222222222');
+		}
+	}])
+	app.directive('myDirective',function(){
+		return{
+			restrict:"EA",
+			replace:true,
+			// scope:{ //添加作用域
+			// 	name:'@'
+			// },
+			// template:'<button ng-click="change()">点击获取</button><br /><p>我的名字是{{names}}</p>',
+			template:'<button>点击获取</button>',
+			link:function(scope,ele,attr){
+				ele.bind('click',function(){
+					// scope.changeName(); //调用方式1
+					//scope.$apply("changeName()") //调用方式2
+					scope.$apply(attr.fn)
+				})
+				// scope.change = function(){
+				// 	console.log(attr.name)
+				// }
+			}
+		}
+	})
+</script>
+</html>

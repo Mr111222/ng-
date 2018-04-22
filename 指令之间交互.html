@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en" ng-app="app">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<div class="class" ng-controller="ctrl1">
+		{{names}}<br />
+		<div>
+			<zz power>获取到力量</zz>
+		</div>
+		<div>
+			<zz power name>获取到力量，名字</zz>
+		</div>
+		<div>
+			<zz power name age>获取到力量，名字。年龄</zz>
+		</div>
+	</div>
+</body>
+<script src="angular.min.js"></script>
+<script>
+	var app = angular.module('app',[]);
+	app.controller('ctrl1',['$scope',function($scope){
+		$scope.names = "zhouzhi"
+	}])
+
+	app.directive('zz',function(){
+		return{
+			restrict:"AE",
+			scope:{},
+			controller:function($scope){
+				$scope.arrs = [];
+				this.addPower = function(){
+					$scope.arrs.push('力量')
+				};
+				this.addName = function(){
+					$scope.arrs.push('名字')
+				};
+				this.addAge = function(){
+					$scope.arrs.push('年龄')
+				};
+			},
+			link:function(scope,ele,attr){
+				ele.bind('click',function(){
+					console.log(scope.arrs)
+				})
+			}
+		}
+	})
+
+	app.directive('power',function(){
+		return{
+			require:'^zz',
+			link:function(scope,ele,attr,ctrl){
+				ctrl.addPower();
+			}
+
+		}
+	})
+	app.directive('name',function(){
+		return{
+			require:'^zz',
+			link:function(scope,ele,attr,ctrl){
+				ctrl.addName();
+			}
+
+		}
+	})
+	app.directive('age',function(){
+		return{
+			require:'^zz',
+			link:function(scope,ele,attr,ctrl){
+				ctrl.addAge();
+			}
+
+		}
+	})
+</script>
+</html>

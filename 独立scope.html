@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body ng-app="app">
+	<div class="zz" ng-controller="ctrl1">
+		<p>我的名字是{{zz}}</p>
+		<p>我是父作用域的数据---->{{article}}</p>
+		<hello></hello>
+		<hello></hello>
+		<hello></hello>
+		<hello></hello>
+
+		<p>绑定策略的学习</p>
+		<p>1.@符号的使用,传递字符串</p>
+		<bang names="{{zz}}"></bang>
+		<p>2.=符号的使用,同时修改父级作用域，实现双向修改</p>
+		<result articles="article"></result>
+
+		<p>3.&符号的使用，建议这个getage方法名字小写,还有就是在传参的时候传个对象{age:ages},跟你的父级定义的方法形参一致</p>
+		<request getage="changeName(age)"></request>
+		<request getage="changeName(age)"></request>
+		<request getage="changeName(age)"></request>
+		<request getage="changeName(age)"></request>
+	</div>
+
+	
+	
+</body>
+<script src="angular.min.js"></script>
+<script>
+	var app = angular.module('app',[]);
+	app.controller('ctrl1',['$scope',function($scope){
+		$scope.zz = 'zz';
+		$scope.article = '';
+		$scope.changeName = function(age){
+			console.log('我的年龄是'+age);
+		};
+		$scope.sayHello = function(name){
+			alert('我的名字是'+name)
+		}
+	}])
+
+	app.directive('hello',function(){
+		return{
+			restrict:"EA",
+			scope:{},//添加独立作用域，组件间不受干扰
+			template:'<div><input type="text" ng-model="user"/>{{user}}</div>'
+		}
+	})
+
+	// @的使用
+	app.directive('bang',function(){
+		return{
+			restrict:"EA",
+			scope:{
+				names:'@'
+			},//添加独立作用域，组件间不受干扰
+			template:'<div>@符号的绑定--->来自父级作用域的字符串-->{{names}}</div>'
+		}
+	})
+
+	// = 号的使用
+	app.directive('result',function(){
+		return{
+			restrict:"EA",
+			scope:{
+				articles:'='
+			},//添加独立作用域，组件间不受干扰
+			template:'<div><input ng-model="articles"/></div>'
+		}
+	})
+
+
+	// &的使用
+	app.directive('request',function(){
+		return{
+			restrict:"EA",
+			scope:{
+				getage:'&'  //小写
+			},//添加独立作用域，组件间不受干扰
+			template:`<div>
+						<input type="text" ng-model="ages" />
+						<button ng-click="getage({age:ages})">获取年龄</button>
+					</div>`
+		}
+	})
+
+	// &的使用
+	app.directive('greeting',function(){
+		return{
+			restrict:"EA",
+			scope:{
+				greet:'&'
+			},//添加独立作用域，组件间不受干扰
+			template:`<div>
+						<input type="text" ng-model="names" />
+						<button ng-click="greet({name:names})">获取年龄</button>
+					</div>`
+		}
+	})
+
+</script>
+</html>
